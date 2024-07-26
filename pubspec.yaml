@@ -43,6 +43,22 @@ dependencies:
   mime_type:
   pdf: ^3.3.0
   printing: ^5.6.1
+  open_file: ^3.2.1
+  intl:
+  syncfusion_flutter_pdf:
+  path_provider:
+  excel: ^2.0.6
+  socket_io_client: ^2.0.0
+  translator:
+  flutter_charts:
+  flutter_animated_button:
+  animations:
+  screenshot:
+  permission_handler:
+  font_awesome_flutter:
+  url_launcher:
+  animated_text_kit:
+  animated_widgets:
 
 dev_dependencies:
   flutter_test:
@@ -98,4 +114,31 @@ flutter:
   # see https://flutter.dev/custom-fonts/#from-packages
   assets:
     - assets/
+    - assets/about_project.png
+    - assets/login_signup.png
+    - assets/admin_dashboard.png
+    - assets/admissions.png
+    - assets/fees_management.png
+    - assets/expenditures.png
+    - assets/academic_calendar.png
+    - assets/approval_screen.png
+    - assets/notifications.png
+    - assets/library_management.png
+    - assets/student_list.png
+    - assets/transport_management.png
+    - assets/icard_management.png
+    - assets/stock_management.png
+    - assets/subject_management.png
+    - assets/class_management.png
+    - assets/staff_management.png
+    - assets/reception_management.png
+    - assets/leave_management.png
+    - assets/appointments_messaging.png
+    - assets/examination_results.png
+    - assets/teacher_dashboard.png
+    - assets/accountant_dashboard.png
 
+  fonts:
+    - family: HindiFont
+      fonts:
+        - asset: assets/fonts/NotoSans-Regular.ttf

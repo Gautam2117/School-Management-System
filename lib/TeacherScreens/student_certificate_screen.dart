@@ -8,13 +8,35 @@ class StudentCertificateScreen extends StatefulWidget {
 }
 
 class _StudentCertificateScreenState extends State<StudentCertificateScreen> {
+  List<dynamic> students = [];
   List<dynamic> certificates = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
+    _fetchStudents();
     _fetchCertificates();
+  }
+
+  Future<void> _fetchStudents() async {
+    final url = Uri.parse('http://localhost:3000/student-details');
+    try {
+      final response = await http.get(url);
+      if (response.statusCode == 200) {
+        setState(() {
+          students = json.decode(response.body);
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load students');
+      }
+    } catch (error) {
+      setState(() {
+        isLoading = false;
+      });
+      _showErrorDialog('Failed to fetch students. Please try again.');
+    }
   }
 
   Future<void> _fetchCertificates() async {
@@ -68,9 +90,17 @@ class _StudentCertificateScreenState extends State<StudentCertificateScreen> {
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
-              controller: _studentIdController,
-              decoration: InputDecoration(labelText: 'Student ID'),
+            DropdownButtonFormField(
+              items: students.map<DropdownMenuItem<String>>((student) {
+                return DropdownMenuItem<String>(
+                  value: student['serial_no'].toString(),
+                  child: Text(student['student_name']),
+                );
+              }).toList(),
+              decoration: InputDecoration(labelText: 'Select Student'),
+              onChanged: (value) {
+                _studentIdController.text = value.toString();
+              },
             ),
             TextField(
               controller: _certificateTypeController,
