@@ -72,9 +72,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
   }
 
   List<String> _classOptions() {
-    return widget.schoolRange == '6-10'
-        ? ['All', '6', '7', '8', '9', '10']
-        : ['All', '11', '12'];
+    return widget.schoolRange == '6-8'
+        ? ['All', '6', '7', '8']
+        : ['All', '9', '10', '11', '12'];
   }
 
   void _showDocument(BuildContext context, String documentPath) {
@@ -702,9 +702,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         DataColumn(label: Text('Actions (कार्रवाई)', style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black))),
                       ],
                       rows: applications
-                          .where((application) => widget.schoolRange == '6-10'
-                          ? application['class'].startsWith(RegExp(r'^[6-9]|10$'))
-                          : application['class'].startsWith(RegExp(r'^[11-12]')))
+                          .where((application) => widget.schoolRange == '6-8'
+                          ? application['class'].startsWith(RegExp(r'^[6-8]'))
+                          : application['class'].startsWith(RegExp(r'^[9-12]')))
                           .map<DataRow>((application) => _buildDataRow(context, application)).toList(),
                       dataRowColor: MaterialStateProperty.resolveWith<Color?>((Set<MaterialState> states) {
                         if (states.contains(MaterialState.selected)) return Theme.of(context).colorScheme.primary.withOpacity(0.08);
@@ -786,23 +786,45 @@ class _BarChartScreenState extends State<BarChartScreen> {
         maxY: data.values.reduce((a, b) => a > b ? a : b).toDouble(),
         barTouchData: BarTouchData(enabled: true),
         titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: SideTitles(
-            showTitles: true,
-            getTextStyles: (context, value) => const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
-            margin: 16,
-            getTitles: (double value) {
-              return months[value.toInt()];
-            },
+          bottomTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    months[value.toInt()],
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                );
+              },
+              reservedSize: 40,
+              interval: 1,
+            ),
           ),
-          leftTitles: SideTitles(
-            showTitles: true,
-            getTextStyles: (context, value) => const TextStyle(
-                color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
-            interval: 10,
-            margin: 8,
-            reservedSize: 40,
+          leftTitles: AxisTitles(
+            sideTitles: SideTitles(
+              showTitles: true,
+              getTitlesWidget: (value, meta) {
+                return Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
+                  child: Text(
+                    value.toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  ),
+                );
+              },
+              reservedSize: 40,
+              interval: 10,
+            ),
           ),
         ),
         borderData: FlBorderData(
@@ -813,13 +835,14 @@ class _BarChartScreenState extends State<BarChartScreen> {
           return BarChartGroupData(
             x: monthIndex,
             barRods: [
-              BarChartRodData(y: entry.value.toDouble(), colors: [Colors.teal])
+              BarChartRodData(toY: entry.value.toDouble(), color: Colors.teal)
             ],
             showingTooltipIndicators: [0],
           );
         }).toList(),
       ),
     );
+
   }
 
   @override

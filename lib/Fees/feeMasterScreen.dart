@@ -21,7 +21,9 @@ class _FeeMasterScreenState extends State<FeeMasterScreen> {
   String _selectedFinancialYear = '2024';
 
   List<String> _classOptions() {
-    return widget.schoolRange == '6-10' ? ['6', '7', '8', '9', '10'] : ['11', '12'];
+    return widget.schoolRange == '6-8'
+        ? ['6', '7', '8']
+        : ['9', '10', '11', '12'];
   }
 
   final List<String> _studentTypes = ['New', 'Old'];

@@ -57,7 +57,7 @@ class _AdminDashboardState extends State<AdminDashboard> {
     setState(() {
       role = prefs.getString('role') ?? '';
       userId = prefs.getInt('userId') ?? 0;
-      selectedClassRange = widget.schoolRange == '6-10' ? '6-10' : '11-12';
+      selectedClassRange = widget.schoolRange == '6-8' ? '6-8' : '9-12';
     });
     print('Loaded role: $role, userId: $userId');
     if (role == 'admin') {
@@ -418,10 +418,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
   Widget _buildSummaryCards() {
     // Filter students based on the selected school range
     int totalFilteredStudents = dashboardData['classDistribution']?.where((data) {
-      if (selectedClassRange == '11-12') {
-        return data['class'].startsWith('11') || data['class'].startsWith('12');
+      if (selectedClassRange == '9-12') {
+        return data['class'].startsWith('9') || data['class'].startsWith('10') || data['class'].startsWith('11') || data['class'].startsWith('12');
       } else {
-        return data['class'].startsWith('6') || data['class'].startsWith('7') || data['class'].startsWith('8') || data['class'].startsWith('9') || data['class'].startsWith('10');
+        return data['class'].startsWith('6') || data['class'].startsWith('7') || data['class'].startsWith('8');
       }
     }).fold(0, (sum, data) => sum + data['count']) ?? 0;
 
@@ -476,9 +476,9 @@ class _AdminDashboardState extends State<AdminDashboard> {
         Text("Select Class Range: "),
         DropdownButton<String>(
           value: selectedClassRange,
-          items: widget.schoolRange == '6-10'
-              ? [DropdownMenuItem(value: '6-10', child: Text('6 to 10'))]
-              : [DropdownMenuItem(value: '11-12', child: Text('11 to 12'))],
+          items: widget.schoolRange == '6-8'
+              ? [DropdownMenuItem(value: '6-8', child: Text('6 to 8'))]
+              : [DropdownMenuItem(value: '9-12', child: Text('9 to 12'))],
           onChanged: (value) {
             setState(() {
               selectedClassRange = value!;
@@ -526,10 +526,10 @@ class _AdminDashboardState extends State<AdminDashboard> {
 
   Widget _buildClassDistributionChart() {
     final filteredClasses = dashboardData['classDistribution']?.where((data) {
-      if (selectedClassRange == '11-12') {
-        return data['class'].startsWith('11') || data['class'].startsWith('12');
+      if (selectedClassRange == '9-12') {
+        return data['class'].startsWith('9') || data['class'].startsWith('10') || data['class'].startsWith('11') || data['class'].startsWith('12');
       } else {
-        return data['class'].startsWith('6') || data['class'].startsWith('7') || data['class'].startsWith('8') || data['class'].startsWith('9') || data['class'].startsWith('10');
+        return data['class'].startsWith('6') || data['class'].startsWith('7') || data['class'].startsWith('8');
       }
     }).toList();
 
@@ -544,36 +544,51 @@ class _AdminDashboardState extends State<AdminDashboard> {
             maxY: 100,
             barTouchData: BarTouchData(enabled: true),
             titlesData: FlTitlesData(
-              show: true,
-              bottomTitles: SideTitles(
-                showTitles: true,
-                getTextStyles: (context, value) => const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
-                margin: 16,
-                getTitles: (double value) {
-                  if (filteredClasses != null &&
-                      value.toInt() < filteredClasses.length) {
-                    final className = filteredClasses[value.toInt()]['class'];
-                    return className is String ? className : className.toString();
-                  }
-                  return '';
-                },
+              leftTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    return Text(
+                      value.toInt().toString(),
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                      ),
+                    );
+                  },
+                  interval: 10,
+                  reservedSize: 40,
+                ),
               ),
-              leftTitles: SideTitles(
-                showTitles: true,
-                getTextStyles: (context, value) => const TextStyle(
-                    color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
-                interval: 10,
-                margin: 8,
-                reservedSize: 40,
+              bottomTitles: AxisTitles(
+                sideTitles: SideTitles(
+                  showTitles: true,
+                  getTitlesWidget: (value, meta) {
+                    if (filteredClasses != null && value.toInt() < filteredClasses.length) {
+                      final className = filteredClasses[value.toInt()]['class'];
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(
+                          className is String ? className : className.toString(),
+                          style: const TextStyle(
+                            color: Colors.black,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                        ),
+                      );
+                    }
+                    return const SizedBox.shrink();
+                  },
+                ),
               ),
             ),
             borderData: FlBorderData(
               show: false,
             ),
             barGroups: filteredClasses != null
-                ? filteredClasses
-                .map<BarChartGroupData>((data) {
+                ? filteredClasses.map<BarChartGroupData>((data) {
               final String className = data['class'];
               final double count = data['count'] is String
                   ? double.tryParse(data['count']) ?? 0
@@ -581,14 +596,14 @@ class _AdminDashboardState extends State<AdminDashboard> {
               return BarChartGroupData(
                 x: filteredClasses.indexOf(data),
                 barRods: [
-                  BarChartRodData(y: count, colors: [Colors.teal])
+                  BarChartRodData(toY: count, color: Colors.teal)
                 ],
                 showingTooltipIndicators: [0],
               );
             }).toList()
                 : [],
           ),
-        ),
+        )
       ),
     );
   }

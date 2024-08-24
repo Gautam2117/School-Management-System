@@ -324,9 +324,9 @@ class _StudentFeesFormState extends State<StudentFeesForm> {
                         children: [
                           buildDropdown(
                             value: _selectedClass,
-                            items: widget.schoolRange == '6-10'
-                                ? <String>['6', '7', '8', '9', '10']
-                                : <String>['11', '12'],
+                            items: widget.schoolRange == '6-8'
+                                ? <String>['6', '7', '8']
+                                : <String>['9', '10', '11', '12'],
                             onChanged: (String? newValue) {
                               setState(() {
                                 _selectedClass = newValue!;

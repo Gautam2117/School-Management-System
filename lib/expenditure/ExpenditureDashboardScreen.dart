@@ -445,8 +445,8 @@ class ExpenditureChartScreen extends StatelessWidget {
         x: months.indexOf(entry.key),
         barRods: [
           BarChartRodData(
-            y: entry.value,
-            colors: [Colors.lightBlueAccent],
+            toY: entry.value,
+            color: Colors.lightBlueAccent,
           ),
         ],
       );
@@ -475,16 +475,46 @@ class ExpenditureChartScreen extends StatelessWidget {
                   barGroups: barGroups,
                   borderData: FlBorderData(show: false),
                   titlesData: FlTitlesData(
-                    leftTitles: SideTitles(showTitles: true),
-                    bottomTitles: SideTitles(
-                      showTitles: true,
-                      getTitles: (double value) {
-                        return value >= 0 && value < months.length ? months[value.toInt()] : '';
-                      },
+                    leftTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          return Text(
+                            value.toInt().toString(),
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 12,
+                            ),
+                          );
+                        },
+                        reservedSize: 40,
+                        interval: 1,
+                      ),
+                    ),
+                    bottomTitles: AxisTitles(
+                      sideTitles: SideTitles(
+                        showTitles: true,
+                        getTitlesWidget: (value, meta) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                            child: Text(
+                              value >= 0 && value < months.length ? months[value.toInt()] : '',
+                              style: const TextStyle(
+                                color: Colors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12,
+                              ),
+                            ),
+                          );
+                        },
+                        reservedSize: 40,
+                        interval: 1,
+                      ),
                     ),
                   ),
                 ),
-              ),
+              )
             ),
           ],
         ),

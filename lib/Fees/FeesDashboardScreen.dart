@@ -23,7 +23,7 @@ class _FeesDashboardScreenState extends State<FeesDashboardScreen> {
   List<Map<String, dynamic>> _feesRecords = [];
 
   List<String> _classOptions() {
-    return widget.schoolRange == '6-10' ? ['6', '7', '8', '9', '10'] : ['11', '12'];
+    return widget.schoolRange == '6-8' ? ['6', '7', '8'] : ['9', '10', '11', '12'];
   }
 
   final List<String> _months = [

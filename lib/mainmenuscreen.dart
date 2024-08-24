@@ -165,16 +165,16 @@ class _MainMenuScreenState extends State<MainMenuScreen> {
           children: [
             _buildSchoolCard(
               context,
-              'महर्षि विद्यापीठ जूनियर हाईस्कूल, बबेरू - बाँदा for 6 - 10',
+              'महर्षि विद्यापीठ जूनियर हाईस्कूल, बबेरू - बाँदा for 6 - 8',
               Colors.orange,
-                  () => _selectSchool('6-10'),
+                  () => _selectSchool('6-8'),
             ),
             SizedBox(height: 20),
             _buildSchoolCard(
               context,
-              'महर्षि विद्या पीठ पटेल श्री पी.एस.एस. कन्या इण्टर कालेज बबेरू - बाँदा (उ0 प्र0) for 11 to 12',
+              'महर्षि विद्या पीठ पटेल श्री पी.एस.एस. कन्या इण्टर कालेज बबेरू - बाँदा (उ0 प्र0) for 9 to 12',
               Colors.green,
-                  () => _selectSchool('11-12'),
+                  () => _selectSchool('9-12'),
             ),
           ],
         ),

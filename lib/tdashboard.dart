@@ -263,70 +263,83 @@ class _TeacherDashboardPageState extends State<TeacherDashboardPage> {
             BarChartGroupData(
               x: 1,
               barRods: [
-                BarChartRodData(y: 30000, colors: [Colors.blue])
+                BarChartRodData(toY: 30000, color: Colors.blue),
               ],
               showingTooltipIndicators: [0],
             ),
             BarChartGroupData(
               x: 2,
               barRods: [
-                BarChartRodData(y: 40000, colors: [Colors.blue])
+                BarChartRodData(toY: 40000, color: Colors.blue),
               ],
               showingTooltipIndicators: [0],
             ),
             BarChartGroupData(
               x: 3,
               barRods: [
-                BarChartRodData(y: 35000, colors: [Colors.blue])
+                BarChartRodData(toY: 35000, color: Colors.blue),
               ],
               showingTooltipIndicators: [0],
             ),
             BarChartGroupData(
               x: 4,
               barRods: [
-                BarChartRodData(y: 45000, colors: [Colors.blue])
+                BarChartRodData(toY: 45000, color: Colors.blue),
               ],
               showingTooltipIndicators: [0],
             ),
             BarChartGroupData(
               x: 5,
               barRods: [
-                BarChartRodData(y: 50000, colors: [Colors.blue])
+                BarChartRodData(toY: 50000, color: Colors.blue),
               ],
               showingTooltipIndicators: [0],
             ),
           ],
           titlesData: FlTitlesData(
-            show: true,
-            bottomTitles: SideTitles(
-              showTitles: true,
-              getTextStyles: (context, value) => const TextStyle(color: Colors.black, fontSize: 10),
-              margin: 10,
-              getTitles: (double value) {
-                switch (value.toInt()) {
-                  case 1:
-                    return '2019';
-                  case 2:
-                    return '2020';
-                  case 3:
-                    return '2021';
-                  case 4:
-                    return '2022';
-                  case 5:
-                    return '2023';
-                  default:
-                    return '';
-                }
-              },
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) {
+                  final style = TextStyle(
+                    color: Colors.black,
+                    fontSize: 10,
+                  );
+                  switch (value.toInt()) {
+                    case 1:
+                      return Text('2019', style: style);
+                    case 2:
+                      return Text('2020', style: style);
+                    case 3:
+                      return Text('2021', style: style);
+                    case 4:
+                      return Text('2022', style: style);
+                    case 5:
+                      return Text('2023', style: style);
+                    default:
+                      return const SizedBox.shrink(); // Empty widget if no match
+                  }
+                },
+              ),
             ),
-            leftTitles: SideTitles(
-              showTitles: true,
-              getTextStyles: (context, value) => const TextStyle(color: Colors.black, fontSize: 10),
-              margin: 10,
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                getTitlesWidget: (value, meta) {
+                  return Text(
+                    value.toInt().toString(),
+                    style: const TextStyle(
+                      color: Colors.black,
+                      fontSize: 10,
+                    ),
+                  );
+                },
+              ),
             ),
           ),
         ),
-      ),
+      )
+
     );
   }
 
